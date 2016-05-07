@@ -19,7 +19,7 @@ static int dht11_read_val_test(float *humidity, float *temperature, float *fahre
 	digitalWrite(DHT11PIN, LOW);
 	delay(18);
 	digitalWrite(DHT11PIN, HIGH);
-	delayMicroseconds(40);
+	delayMicroseconds(39);
 	pinMode(DHT11PIN, INPUT);
 	for(i = 0; i < MAX_TIME; i++) {
 		counter = 0;

@@ -50,8 +50,8 @@ int main() {
 	// setup wiringpi spi
 	wiringPiSPISetup(0, 1000000) ;
 
-	get4chDataFromMCP3204(lux);
-	return 0;
+//	get4chDataFromMCP3204(lux);
+//	return 0;
 
 	// njl7502 (lux)
 	for (i = SAMPLE_COUNT - 1; i >= 0; --i) {
@@ -72,7 +72,7 @@ int main() {
 		wiringPiSPIDataRW (0, data, sizeof(data));
 	
 		// convert unit to lux
-		moisture[i] = (float)(((data[1] << 8) + data[2]) & 0x0FFF) * 1930.0f / 4096.0f;
+		moisture[i] = (float)(((data[1] << 8) + data[2]) & 0x0FFF) * 193.0f / 4096.0f;
 	}
 
 #if SAMPLE_COUNT == 3
