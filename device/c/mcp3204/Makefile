@@ -1,10 +1,10 @@
 ifndef MAKEROOT
-	export MAKEROOT:= $(shell path=`pwd`; until test -d $$path/.git; do path=$${path%/*}; done; echo $$path)
+	export MAKEROOT:= $(shell path=`pwd`; until test -d $$path/.git; do path=$${path%/*}; done; echo $$path/device)
 endif
 
 include $(MAKEROOT)/mk/base.mk
 
-TARGET = 007.mcp3204
+TARGET = mcp3204
 
 all:
 	gcc main.c -L/usr/local/lib -lwiringPi -lrt -o $(TARGET)
