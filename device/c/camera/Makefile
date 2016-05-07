@@ -1,5 +1,5 @@
 ifndef MAKEROOT
-	export MAKEROOT:= $(shell path=`pwd`; until test -d $$path/.git; do path=$${path%/*}; done; echo $$path)
+	export MAKEROOT:= $(shell path=`pwd`; until test -d $$path/.git; do path=$${path%/*}; done; echo $$path/device)
 endif
 
 include $(MAKEROOT)/mk/base.mk
@@ -8,7 +8,7 @@ ifneq ($(CAMERA),DISABLE)
 	CFLAGS = -DENABLE_CAMERA
 endif
 
-TARGET = 005.camera
+TARGET = camera
 
 ifeq ($(CAMERA),DISABLE)
 SOURCE = process.cpp image_input.cpp
