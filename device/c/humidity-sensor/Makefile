@@ -1,10 +1,10 @@
 ifndef MAKEROOT
-	export MAKEROOT:= $(shell path=`pwd`; until test -d $$path/.git; do path=$${path%/*}; done; echo $$path)
+	export MAKEROOT:= $(shell path=`pwd`; until test -d $$path/.git; do path=$${path%/*}; done; echo $$path/device)
 endif
 
 include $(MAKEROOT)/mk/base.mk
 
-TARGET = 002.humidity
+TARGET = humidity
 
 all:
 	gcc -c main.c
