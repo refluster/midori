@@ -9,8 +9,8 @@ require "uri"
 
 class FileUploader
   def initialize
-    @uri = URI.parse "http://192.168.2.1:8880/upload.cgi"
-#    @uri = URI.parse "http://lab.schememono.net/midori/server/api/upload.cgi"
+#    @uri = URI.parse "http://192.168.2.1:8880/upload.cgi"
+    @uri = URI.parse "http://lab.schememono.net/midori/server/api/upload.cgi"
     @request = Net::HTTP::Post.new @uri.path
   end
 
