@@ -9,7 +9,7 @@ LOG_DIR = ROOT_DIR + '/log'
 
 class FileUploader
   def initialize
-    @uri = URI.parse "http://localhost:8880/upload.cgi"
+    @uri = URI.parse "http://lab.schememono.net/midori/server/api/upload.cgi"
     @request = Net::HTTP::Post.new @uri.path
   end
 
