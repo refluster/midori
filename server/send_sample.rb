@@ -47,6 +47,12 @@ class FileUploader
   end
 end
 
-FileUploader.new.uploadFile([
-                             {path: "/Users/uehara/test.txt",
-                               name: 'file'}])
+uploader = FileUploader.new
+uploader.uploadFile([
+                     {name: '01min',
+                       path: "/Users/uehara/mnt/work/midori/device/log/20160508_01min.csv"},
+                     {name: '30min',
+                       path: "/Users/uehara/mnt/work/midori/device/log/20160508_30min.csv"},
+                     {name: 'img',
+                       path: "/Users/uehara/mnt/work/midori/device/log/img/20160508_1300.jpg"},
+                    ])
