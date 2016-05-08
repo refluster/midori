@@ -28,11 +28,15 @@ def readData(date, time)
     celsius =  $3
   }
 
+  cmdCamera = ROOT_DIR + "/c/camera/camera -b 20 -c 60 -g 100 -s 80 -r 160x120 -o #{imgFilePath}"
+  Open3.capture3(cmdCamera)
+
   return {
     humidity: humidity,
     celsius: celsius,
     illuminance: illuminance,
     moisture: moisture,
+    camera: imgFile
   };
 end
 
