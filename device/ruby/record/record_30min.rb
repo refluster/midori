@@ -17,26 +17,22 @@ def readData(date, time)
   imgFilePath = LOG_DIR + "/img/#{imgFile}"
 
   Open3.popen3(ROOT_DIR + '/c/humidity-sensor/humidity -1') {|stdin, stdout, stderr|
-    /humidity:([\d\.]+) celsius:([\d\.]+)/ =~ stdout.read
+    /humidity:([\d\.]+)/ =~ stdout.read
     humidity = $1
-    celsius =  $2
   }
 
   Open3.popen3(ROOT_DIR + '/c/mcp3204/mcp3204') {|stdin, stdout, stderr|
-    /illuminance: ([\d\.]+) lux\nmoisture: ([\d\.]+) %/ =~ stdout.read
+    /illuminance: ([\d\.]+) .*\nmoisture: ([\d\.]+) .*\ncelsius: ([\d\.]+)/ =~ stdout.read
     illuminance = $1
     moisture =  $2
+    celsius =  $3
   }
-
-  cmdCamera = ROOT_DIR + "/c/camera/camera -b 20 -c 60 -g 100 -s 80 -r 160x120 -o #{imgFilePath}"
-  Open3.capture3(cmdCamera)
 
   return {
     humidity: humidity,
     celsius: celsius,
     illuminance: illuminance,
     moisture: moisture,
-    camera: imgFile
   };
 end
 
