@@ -1,4 +1,4 @@
-var Apl = function() {
+var Graph = function() {
     this.parseDate = d3.time.format("%Y%m%d_%H%M").parse;
 	this.width = $('#humidity').width();
 	this.height = $('#humidity').height();
@@ -34,7 +34,7 @@ var Apl = function() {
         .append("g")
 };
 
-Apl.prototype.showGraph = function(idx) {
+Graph.prototype.showGraph = function(idx) {
     d3.csv("../log/20160508_30min.csv", function(error, data) {
         // format data
         data.forEach(function(d) {
@@ -62,6 +62,14 @@ Apl.prototype.showGraph = function(idx) {
 			.attr("fill", "none")
             .attr("d", this.line);
     }.bind(this));
+};
+
+var Apl = function() {
+	graph = new Graph();
+};
+
+Apl.prototype.showGraph = function() {
+	graph.showGraph();
 };
 
 $(function() {
