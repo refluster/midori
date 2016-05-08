@@ -32,6 +32,9 @@ var Graph = function(name, data) {
         .attr("height", this.height)
         .append("g")
 
+	this.svg.selectAll('*')
+		.remove();
+
     // set domain as data range
     this.x.domain(d3.extent(data, function(d) { return d.date; }));
     this.y.domain(d3.extent(data, function(d) { return d[this.name]; }.bind(this)));
@@ -54,23 +57,39 @@ var Graph = function(name, data) {
 };
 
 var Apl = function() {
-    d3.csv("../log/20160508_01min.csv", function(error, data) {
+	$('#date_select').bind('change', function() {
+		console.log('change hoge');
+		this.showGraph($('#date_select option:selected').val());
+
+	}.bind(this));
+
+	var d = new Date();
+	var date = d.getFullYear() +
+		('0' + (d.getMonth() + 1)).slice(-2) +
+		('0' + d.getDate()).slice(-2)
+	$("#date_select").val(date);
+	$("#date_select").change();
+};
+
+Apl.prototype.showGraph = function(date) {
+	// date: yyyymmdd format
+	d3.csv('../log/' + date + '_01min.csv', function(error, data) {
 		this.parseDate = d3.time.format("%Y%m%d_%H%M").parse;
 
-        // format data
-        data.forEach(function(d) {
-            d.date = this.parseDate(d.date);
-            d.humidity = +d.humidity;
+		// format data
+		data.forEach(function(d) {
+			d.date = this.parseDate(d.date);
+			d.humidity = +d.humidity;
 			d.celsius = +d.celsius;
 			d.illumination = +d.illumination;
 			d.moisture = +d.moisture;
-        }.bind(this));
+		}.bind(this));
 
 		graph0 = new Graph('humidity', data);
 		graph1 = new Graph('celsius', data);
 		graph2 = new Graph('moisture', data);
 		graph3 = new Graph('illumination', data);
-    }.bind(this));
+	}.bind(this));
 };
 
 $(function() {
