@@ -1,7 +1,7 @@
-var Graph = function() {
-    this.parseDate = d3.time.format("%Y%m%d_%H%M").parse;
-	this.width = $('#humidity').width();
-	this.height = $('#humidity').height();
+var Graph = function(name, data) {
+	this.name = name;
+	this.width = $('#' + this.name).width();
+	this.height = $('#' + this.name).height();
 
 	this.x = d3.time.scale()
         .range([0, this.width]);
@@ -12,7 +12,6 @@ var Graph = function() {
 	this.xAxis = d3.svg.axis()
         .scale(this.x)
         .orient('top')
-		.ticks(d3.time.hour, 3)
 		.innerTickSize(0)
 		.outerTickSize(0)
 		.tickPadding(4);
@@ -26,53 +25,55 @@ var Graph = function() {
 	
 	this.line = d3.svg.line()
         .x(function(d) { return this.x(d.date); }.bind(this))
-        .y(function(d) { return this.y(d.humidity); }.bind(this));
-	
-	this.svg = d3.select("#humidity")
+        .y(function(d) { return this.y(d[this.name]); }.bind(this));
+
+	this.svg = d3.select("#" + this.name)
         .attr("width", this.width)
         .attr("height", this.height)
         .append("g")
+
+    // set domain as data range
+    this.x.domain(d3.extent(data, function(d) { return d.date; }));
+    this.y.domain(d3.extent(data, function(d) { return d[this.name]; }.bind(this)));
+
+    // show x axis
+    this.svg.append("g")
+        .attr("transform", "translate(0," + this.height + ")")
+        .call(this.xAxis);
+
+    // show y axis
+    this.svg.append("g")
+        .call(this.yAxis)
+
+    // show line graph
+    this.svg.append("path")
+        .datum(data)
+		.attr("stroke", "blue")
+		.attr("fill", "none")
+        .attr("d", this.line);
 };
 
-Graph.prototype.showGraph = function(idx) {
-    d3.csv("../log/20160508_30min.csv", function(error, data) {
+var Apl = function() {
+    d3.csv("../log/20160508_01min.csv", function(error, data) {
+		this.parseDate = d3.time.format("%Y%m%d_%H%M").parse;
+
         // format data
         data.forEach(function(d) {
             d.date = this.parseDate(d.date);
             d.humidity = +d.humidity;
+			d.celsius = +d.celsius;
+			d.illumination = +d.illumination;
+			d.moisture = +d.moisture;
         }.bind(this));
 
-        // set domain as data range
-        this.x.domain(d3.extent(data, function(d) { return d.date; }));
-        this.y.domain(d3.extent(data, function(d) { return d.humidity; }));
-
-        // show x axis
-        this.svg.append("g")
-            .attr("transform", "translate(0," + this.height + ")")
-            .call(this.xAxis);
-
-        // show y axis
-        this.svg.append("g")
-            .call(this.yAxis)
-
-        // show line graph
-        this.svg.append("path")
-            .datum(data)
-			.attr("stroke", "blue")
-			.attr("fill", "none")
-            .attr("d", this.line);
+		graph0 = new Graph('humidity', data);
+		graph1 = new Graph('celsius', data);
+		graph2 = new Graph('moisture', data);
+		graph3 = new Graph('illumination', data);
     }.bind(this));
-};
-
-var Apl = function() {
-	graph = new Graph();
-};
-
-Apl.prototype.showGraph = function() {
-	graph.showGraph();
 };
 
 $(function() {
 	var apl = new Apl();
-	apl.showGraph();
+//	apl.showGraph();
 });
