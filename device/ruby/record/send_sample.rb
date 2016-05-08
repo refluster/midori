@@ -4,12 +4,13 @@
 require "net/http"
 require "uri"
 
-ROOT_DIR = File.expand_path(File.dirname(__FILE__) + '/../../')
-LOG_DIR = ROOT_DIR + '/log'
+#ROOT_DIR = File.expand_path(File.dirname(__FILE__) + '/../../')
+#LOG_DIR = ROOT_DIR + '/log'
 
 class FileUploader
   def initialize
-    @uri = URI.parse "http://lab.schememono.net/midori/server/api/upload.cgi"
+    @uri = URI.parse "http://192.168.2.1:8880/upload.cgi"
+#    @uri = URI.parse "http://lab.schememono.net/midori/server/api/upload.cgi"
     @request = Net::HTTP::Post.new @uri.path
   end
 
@@ -47,12 +48,16 @@ class FileUploader
   end
 end
 
-uploader = FileUploader.new
-uploader.uploadFile([
-                     {name: '01min',
-                       path: "/Users/uehara/mnt/work/midori/device/log/20160508_01min.csv"},
-                     {name: '30min',
-                       path: "/Users/uehara/mnt/work/midori/device/log/20160508_30min.csv"},
-                     {name: 'img',
-                       path: "/Users/uehara/mnt/work/midori/device/log/img/20160508_1300.jpg"},
-                    ])
+def main
+  uploader = FileUploader.new
+  uploader.uploadFile([
+                       {name: '01min',
+                         path: "/Users/uehara/mnt/work/midori/device/log/20160508_01min.csv"},
+                       {name: '30min',
+                         path: "/Users/uehara/mnt/work/midori/device/log/20160508_30min.csv"},
+                       {name: 'img',
+                         path: "/Users/uehara/mnt/work/midori/device/log/img/20160508_1300.jpg"},
+                      ])
+end
+
+#main

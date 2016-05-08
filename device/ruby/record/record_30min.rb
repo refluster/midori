@@ -2,11 +2,13 @@
 # -*- coding: euc-jp -*-
 
 require 'open3'
+require_relative 'send_sample'
 
 ROOT_DIR = File.expand_path(File.dirname(__FILE__) + '/../../')
 LOG_DIR = ROOT_DIR + '/log'
 TIME = Time.new.strftime('%H%M')
 DATE = Time.new.strftime('%Y%m%d')
+DATE_MINUS_1MIN = (Time.new - 60).strftime('%Y%m%d')
 
 def readData(date, time)
   humidity = 0
@@ -56,13 +58,32 @@ def writeData(date, time, v)
   end
 end
 
-def recordData(date, time)
+def upload(date, time, date_minus_1min)
+  imgFile = "#{date}_#{time}.jpg"
+  f30min = LOG_DIR + "/#{date}_30min.csv"
+  f01min = LOG_DIR + "/#{date_minus_1min}_01min.csv"
+  fImg = LOG_DIR + "/img/#{imgFile}"
+
+  uploader = FileUploader.new
+  uploader.uploadFile([
+                       {name: '01min',
+                         path: f01min},
+                       {name: '30min',
+                         path: f30min},
+                       {name: 'img',
+                         path: fImg},
+                      ])
+end
+
+def recordData(date, time, date_minus_1min)
   value = readData(date, time)
   writeData(date, time, value)
+  upload(date, time, date_minus_1min)
 end
 
 def main
-  recordData(DATE, TIME)
+  recordData(DATE, TIME, DATE_MINUS_1MIN)
 end
 
 main
+
