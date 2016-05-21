@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
 
 def main
-  img_dir = 'img/'
+  img_dir = '../../log/img/'
   files = []
   dummy = 'blank.jpg'
 
-  (9..17).each {|day|
+  (9..20).each {|day|
     (0..(23)).each {|hour|
       [0,30].each {|min|
         fname = sprintf(img_dir + '201605%02d_%02d%02d.jpg',
